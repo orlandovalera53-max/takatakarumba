@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un nuevo inicio 💌</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Dancing+Script:wght@500;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --red:        #b3122b;
+  --red-dark:   #7d0a1c;
+  --red-bright: #c1121f;
+  --cream:      #fff9f9;
+  --ink:        #5a3232;
+  --ink-soft:   #7d5656;
+  --shadow:     0 24px 60px rgba(179,18,43,.14);
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ -webkit-text-size-adjust:100%; }
+
+body{
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  padding:22px;
+  font-family:'Caveat', 'Segoe Script', cursive;
+  color:var(--ink);
+  background-color:var(--cream);
+  background-image:
+    radial-gradient(circle at 12% 15%, rgba(255,209,222,.60), transparent 45%),
+    radial-gradient(circle at 88% 85%, rgba(255,224,210,.55), transparent 45%);
+  background-attachment:fixed;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.frame{
+  position:relative;
+  width:min(560px, 100%);
+  margin:auto;
+  padding:12px;
+  border:2px solid var(--red);
+  border-radius:32px;
+  background:rgba(255,255,255,.55);
+  box-shadow: 0 0 0 6px rgba(179,18,43,.06), var(--shadow);
+}
+
+.frame::after{
+  content:'';
+  position:absolute;
+  inset:6px;
+  border-radius:26px;
+  border:1px dashed rgba(179,18,43,.45);
+  pointer-events:none;
+}
+
+/* Decoraciones */
+.corner{ position:absolute; z-index:5; pointer-events:none; filter:drop-shadow(0 4px 8px rgba(179,18,43,.18)); }
+.corner--bow{ top:-14px; left:-14px; width:clamp(72px, 20vw, 104px); transform:rotate(-8deg); }
+.corner--flowers{ bottom:-16px; right:-16px; width:clamp(84px, 24vw, 124px); transform:rotate(6deg); }
+
+.card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-height:min(640px, calc(100dvh - 70px));
+  padding:clamp(22px, 6vw, 36px);
+  border-radius:24px;
+  background:linear-gradient(180deg, #fffdfd 0%, #fffafa 100%);
+  overflow:hidden;
+}
+
+.screen{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:12px;
+}
+.screen.active{
+  display:flex;
+  animation:rise .5s cubic-bezier(.22,.8,.3,1) both;
+}
+@keyframes rise{
+  from{ opacity:0; transform:translateY(16px) scale(.985); }
+  to  { opacity:1; transform:none; }
+}
+
+/* Gatitos y Textos */
+.cat{ width:clamp(150px, 46vw, 208px); height:auto; display:block; animation:bob 3.4s ease-in-out infinite; }
+@keyframes bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-8px); } }
+.cat--sad{ animation:bob 4.5s ease-in-out infinite; }
+
+.title{ font-family:'Great Vibes', cursive; font-size:clamp(2.9rem, 12vw, 4.2rem); line-height:1.05; color:var(--red); font-weight:400; }
+.title--shout{ font-family:'Dancing Script', cursive; font-weight:700; font-size:clamp(1.9rem, 8.5vw, 2.7rem); color:var(--red-bright); letter-spacing:.5px; text-shadow:0 2px 0 rgba(179,18,43,.14); }
+.title--mid{ font-family:'Dancing Script', cursive; font-weight:700; font-size:clamp(1.7rem, 7.5vw, 2.4rem); color:var(--red); }
+.subtitle{ font-size:clamp(1.2rem, 5.2vw, 1.55rem); color:var(--ink-soft); line-height:1.35; max-width:32ch; }
+.hint{ font-size:clamp(.95rem, 4vw, 1.1rem); color:rgba(125,86,86,.75); }
+
+/* Botones */
+.actions{ display:flex; flex-wrap:wrap; justify-content:center; gap:16px; margin-top:10px; width:100%; }
+.btn{
+  font-family:'Caveat', cursive; font-weight:700; font-size:clamp(1.15rem, 4.6vw, 1.35rem); letter-spacing:.4px;
+  color:#fff; background:linear-gradient(180deg, #cf1527 0%, #b3122b 100%); border:none; border-radius:999px;
+  padding:.72em 2.2em; cursor:pointer; box-shadow: 0 5px 0 var(--red-dark), 0 12px 20px rgba(179,18,43,.28);
+  transition:transform .16s ease, box-shadow .16s ease, filter .16s ease; user-select:none;
+}
+.btn:hover{ filter:brightness(1.06); transform:translateY(-2px); }
+.btn:active{ transform:translateY(4px); box-shadow:0 1px 0 var(--red-dark), 0 6px 12px rgba(179,18,43,.25); }
+.btn:focus-visible{ outline:3px solid rgba(179,18,43,.45); outline-offset:4px; }
+
+.btn--ghost{ background:transparent; color:var(--red); box-shadow:inset 0 0 0 2px var(--red); padding:.6em 1.8em; font-size:clamp(1rem, 4vw, 1.15rem); }
+.btn--ghost:hover{ background:rgba(179,18,43,.06); }
+.btn--ghost:active{ transform:translateY(2px); box-shadow:inset 0 0 0 2px var(--red); }
+
+.btn-escape{ position:relative; z-index:4; transition:transform .18s cubic-bezier(.34,1.4,.5,1); will-change:transform; }
+
+/* Corazones */
+.hearts{ position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+.hearts span{ position:absolute; bottom:-24px; font-size:18px; color:rgba(193,18,31,.35); animation:floatUp linear infinite; }
+@keyframes floatUp{ 0%{ transform:translateY(0) scale(.7) rotate(0deg); opacity:0; } 12%{ opacity:1; } 100%{ transform:translateY(-105vh) scale(1.15) rotate(220deg); opacity:0; } }
+.hearts span:nth-child(1){ left:8%; animation-duration:9s; animation-delay:0s; }
+.hearts span:nth-child(2){ left:22%; animation-duration:11s; animation-delay:1.2s; font-size:14px; }
+.hearts span:nth-child(3){ left:38%; animation-duration:8.5s; animation-delay:.6s; font-size:22px; }
+.hearts span:nth-child(4){ left:52%; animation-duration:12s; animation-delay:2.1s; }
+.hearts span:nth-child(5){ left:68%; animation-duration:9.5s; animation-delay:.3s; font-size:16px; }
+.hearts span:nth-child(6){ left:82%; animation-duration:10.5s; animation-delay:1.6s; font-size:20px; }
+.hearts span:nth-child(7){ left:94%; animation-duration:8s; animation-delay:2.6s; font-size:13px; }
+
+/* --- Estilos para los Regalos --- */
+.gift-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  margin-top: 10px;
+}
+.gift-btn {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe3e6 100%);
+  border: 2px dashed rgba(179,18,43,.4);
+  border-radius: 18px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(179,18,43,.05);
+}
+.gift-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: linear-gradient(135deg, #fff0f2 0%, #ffd1d6 100%);
+  border-color: var(--red);
+  box-shadow: 0 8px 25px rgba(179,18,43,.15);
+}
+.gift-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  animation: wiggle 2.5s ease-in-out infinite;
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+.gift-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--red);
+  text-align: left;
+  flex-grow: 1;
+  padding-left: 15px;
+}
+
+/* Carta y Lista */
+.letter-wrap{
+  width:100%; margin-top:6px; padding:16px 14px; border:1px solid rgba(179,18,43,.18);
+  border-radius:18px; background:linear-gradient(180deg,#fffdfa 0%, #fff6f6 100%);
+  box-shadow:inset 0 0 34px rgba(255,214,224,.55);
+}
+.letter{
+  max-height:min(48vh, 420px); overflow-y:auto; padding-right:8px; text-align:left;
+  font-family:'Caveat', cursive; font-size:clamp(1.15rem, 4.6vw, 1.35rem); line-height:1.5; color:#5b3a3a;
+  scrollbar-width:thin; scrollbar-color:rgba(179,18,43,.35) transparent;
+}
+.letter::-webkit-scrollbar{ width:6px; }
+.letter::-webkit-scrollbar-thumb{ background:rgba(179,18,43,.35); border-radius:99px; }
+.letter p{ margin-bottom:.85em; }
+.letter .firma{ font-family:'Dancing Script', cursive; font-weight:700; font-size:1.15em; color:var(--red); text-align:right; margin-top:.6em; }
+
+/* Caja de foto */
+.photo-frame {
+  background: #fff;
+  padding: 15px 15px 30px 15px;
+  border-radius: 4px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.15), inset 0 0 0 1px rgba(179,18,43,.1);
+  transform: rotate(-2deg);
+  max-width: 100%;
+  margin: 10px 0;
+  position: relative;
+}
+.photo-frame::before {
+  content: '';
+  position: absolute;
+  top: -10px; left: 50%; transform: translateX(-50%);
+  width: 60px; height: 20px;
+  background: rgba(255,255,255,.6);
+  box-shadow: 0 1px 3px rgba(0,0,0,.1);
+  border-radius: 2px;
+}
+.photo-img {
+  width: 100%;
+  max-height: 45vh;
+  object-fit: cover;
+  border-radius: 2px;
+  display: block;
+}
+.photo-caption {
+  font-family: 'Caveat', cursive;
+  font-size: 1.4rem;
+  color: var(--ink);
+  text-align: center;
+  margin-top: 15px;
+}
+
+/* Botón de Música */
+.music-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  width: 55px;
+  height: 55px;
+  background: var(--red);
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(179,18,43,.4);
+  z-index: 1000;
+  transition: transform 0.2s, background 0.3s;
+}
+.music-btn:hover { transform: scale(1.1); }
+.music-btn.playing {
+  animation: pulseMusic 2s infinite;
+}
+@keyframes pulseMusic {
+  0% { box-shadow: 0 0 0 0 rgba(179,18,43, 0.7); }
+  70% { box-shadow: 0 0 0 15px rgba(179,18,43, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(179,18,43, 0); }
+}
+
+@media (max-width:420px){
+  body{ padding:16px; }
+  .frame{ border-radius:26px; padding:10px; }
+  .card{ min-height:calc(100dvh - 56px); border-radius:20px; }
+  .corner--bow{ top:-10px; left:-10px; }
+  .corner--flowers{ bottom:-12px; right:-12px; }
+  .gift-text { font-size: 1.4rem; }
+  .music-btn { bottom: 15px; right: 15px; width: 48px; height: 48px; font-size: 1.3rem; }
+}
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Reproductor de YouTube (1x1 píxel, invisible pero válido para el navegador) -->
+<div id="yt-player" style="position:fixed; bottom:0; right:0; width:1px; height:1px; opacity:0.01; pointer-events:none; z-index:-1;"></div>
+
+<!-- Botón flotante de música -->
+<button class="music-btn" id="music-btn" type="button" title="Música">🔇</button>
+
+<div class="frame">
+
+  <!-- LAZO -->
+  <svg class="corner corner--bow" viewBox="0 0 120 120" aria-hidden="true">
+    <path d="M54 68 C50 88 42 100 30 108" stroke="#c1121f" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <path d="M66 68 C70 88 78 100 90 108" stroke="#c1121f" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <path d="M60 58 C44 32 16 32 14 52 C12 72 42 76 60 58 Z" fill="#c1121f"/>
+    <path d="M60 58 C76 32 104 32 106 52 C108 72 78 76 60 58 Z" fill="#c1121f"/>
+    <path d="M60 58 C50 40 34 40 32 52 C30 64 48 68 60 58 Z" fill="#e04a58" opacity=".55"/>
+    <path d="M60 58 C70 40 86 40 88 52 C90 64 72 68 60 58 Z" fill="#e04a58" opacity=".55"/>
+    <ellipse cx="60" cy="58" rx="11" ry="13" fill="#8f0c1a"/>
+  </svg>
+
+  <!-- RAMO -->
+  <svg class="corner corner--flowers" viewBox="0 0 140 140" aria-hidden="true">
+    <path d="M70 96 C60 112 52 122 44 132" stroke="#4f8a52" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M70 96 C82 112 92 120 100 130" stroke="#4f8a52" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="52" cy="118" rx="11" ry="6" fill="#5da05f" transform="rotate(-30 52 118)"/>
+    <ellipse cx="92" cy="116" rx="11" ry="6" fill="#5da05f" transform="rotate(28 92 116)"/>
+    <g transform="translate(70,84)"><g fill="#d62839"><circle cx="0" cy="-15" r="10"/><circle cx="14" cy="-5" r="10"/><circle cx="9" cy="13" r="10"/><circle cx="-9" cy="13" r="10"/><circle cx="-14" cy="-5" r="10"/></g><circle cx="0" cy="0" r="7" fill="#f7d06b"/></g>
+    <g transform="translate(34,62) scale(.78)"><g fill="#e03b4d"><circle cx="0" cy="-15" r="10"/><circle cx="14" cy="-5" r="10"/><circle cx="9" cy="13" r="10"/><circle cx="-9" cy="13" r="10"/><circle cx="-14" cy="-5" r="10"/></g><circle cx="0" cy="0" r="7" fill="#f7d06b"/></g>
+    <g transform="translate(104,56) scale(.72)"><g fill="#c1121f"><circle cx="0" cy="-15" r="10"/><circle cx="14" cy="-5" r="10"/><circle cx="9" cy="13" r="10"/><circle cx="-9" cy="13" r="10"/><circle cx="-14" cy="-5" r="10"/></g><circle cx="0" cy="0" r="7" fill="#f7d06b"/></g>
+    <circle cx="72" cy="44" r="9" fill="#e8607a"/><circle cx="72" cy="44" r="4" fill="#f7d06b"/>
+  </svg>
+
+  <div class="card" id="card">
+
+    <!-- PANTALLA 1 -->
+    <section class="screen active" id="screen1">
+      <svg class="cat" viewBox="0 0 220 240" role="img" aria-label="Gatito tierno mirando hacia arriba">
+        <ellipse cx="110" cy="228" rx="58" ry="9" fill="#000" opacity=".06"/>
+        <path d="M158 198 C196 196 200 158 182 138" stroke="#ffc089" stroke-width="16" fill="none" stroke-linecap="round"/>
+        <ellipse cx="110" cy="184" rx="56" ry="46" fill="#ffc089"/>
+        <ellipse cx="88" cy="220" rx="17" ry="10" fill="#ffe7cc"/><ellipse cx="132" cy="220" rx="17" ry="10" fill="#ffe7cc"/>
+        <path d="M62 68 L50 18 L100 46 Z" fill="#ffc089"/><path d="M158 68 L170 18 L120 46 Z" fill="#ffc089"/>
+        <path d="M67 60 L60 33 L88 47 Z" fill="#ff9fb0"/><path d="M153 60 L160 33 L132 47 Z" fill="#ff9fb0"/>
+        <circle cx="110" cy="106" r="62" fill="#ffd9b0"/>
+        <ellipse cx="88" cy="102" rx="9" ry="12" fill="#3b2b2b"/><ellipse cx="132" cy="102" rx="9" ry="12" fill="#3b2b2b"/>
+        <circle cx="85" cy="96" r="3.2" fill="#fff"/><circle cx="129" cy="96" r="3.2" fill="#fff"/>
+        <ellipse cx="66" cy="126" rx="11" ry="7" fill="#ffb3c1" opacity=".7"/><ellipse cx="154" cy="126" rx="11" ry="7" fill="#ffb3c1" opacity=".7"/>
+        <path d="M110 118 l-6 6 h12 z" fill="#ff8fa3"/><path d="M110 124 v5" stroke="#e0738a" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M110 129 q-8 8 -14 1" stroke="#e0738a" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M110 129 q8 8 14 1" stroke="#e0738a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <g stroke="#e8b48c" stroke-width="2.4" stroke-linecap="round"><path d="M50 112 l-26 -7"/><path d="M50 122 l-26 4"/><path d="M170 112 l26 -7"/><path d="M170 122 l26 4"/></g>
+      </svg>
+      <h1 class="title">Hey!</h1>
+      <p class="subtitle">Hago algo para ti, ¿quieres verlo?</p>
+      <div class="actions">
+        <button class="btn" id="yes1" type="button">Sí</button>
+        <button class="btn btn-escape" id="no1" type="button">No</button>
+      </div>
+    </section>
+
+    <!-- PANTALLA 2 -->
+    <section class="screen" id="screen2">
+      <svg class="cat" viewBox="0 0 220 240" role="img" aria-label="Gatito esperando">
+        <ellipse cx="110" cy="228" rx="58" ry="9" fill="#000" opacity=".06"/>
+        <path d="M158 198 C196 196 200 158 182 138" stroke="#ffc089" stroke-width="16" fill="none" stroke-linecap="round"/>
+        <ellipse cx="110" cy="184" rx="56" ry="46" fill="#ffc089"/>
+        <ellipse cx="88" cy="220" rx="17" ry="10" fill="#ffe7cc"/><ellipse cx="132" cy="220" rx="17" ry="10" fill="#ffe7cc"/>
+        <path d="M62 68 L50 18 L100 46 Z" fill="#ffc089"/><path d="M158 68 L170 18 L120 46 Z" fill="#ffc089"/>
+        <path d="M67 60 L60 33 L88 47 Z" fill="#ff9fb0"/><path d="M153 60 L160 33 L132 47 Z" fill="#ff9fb0"/>
+        <circle cx="110" cy="106" r="62" fill="#ffd9b0"/>
+        <ellipse cx="88" cy="102" rx="9" ry="12" fill="#3b2b2b"/><ellipse cx="132" cy="102" rx="9" ry="12" fill="#3b2b2b"/>
+        <circle cx="85" cy="96" r="3.2" fill="#fff"/><circle cx="129" cy="96" r="3.2" fill="#fff"/>
+        <ellipse cx="66" cy="126" rx="11" ry="7" fill="#ffb3c1" opacity=".7"/><ellipse cx="154" cy="126" rx="11" ry="7" fill="#ffb3c1" opacity=".7"/>
+        <path d="M110 118 l-6 6 h12 z" fill="#ff8fa3"/><path d="M110 124 v5" stroke="#e0738a" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M110 129 q-8 8 -14 1" stroke="#e0738a" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M110 129 q8 8 14 1" stroke="#e0738a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+        <g stroke="#e8b48c" stroke-width="2.4" stroke-linecap="round"><path d="M50 112 l-26 -7"/><path d="M50 122 l-26 4"/><path d="M170 112 l26 -7"/><path d="M170 122 l26 4"/></g>
+      </svg>
+      <h2 class="title title--mid">¿Podemos tener un nuevo inicio?</h2>
+      <p class="hint">(Un nuevo comienzo contigo me haría muy feliz… el botón de “NO” sigue siendo tímido 😼)</p>
+      <div class="actions">
+        <button class="btn" id="yes2" type="button">Sí</button>
+        <button class="btn btn-escape" id="no2" type="button">NO</button>
+      </div>
+    </section>
+
+    <!-- PANTALLA 3 -->
+    <section class="screen" id="screen3">
+      <svg class="cat cat--sad" viewBox="0 0 220 240" role="img" aria-label="Gatito triste">
+        <ellipse cx="110" cy="228" rx="58" ry="9" fill="#000" opacity=".06"/>
+        <path d="M158 198 C196 196 200 158 182 138" stroke="#ffc089" stroke-width="16" fill="none" stroke-linecap="round"/>
+        <ellipse cx="110" cy="184" rx="56" ry="46" fill="#ffc089"/>
+        <ellipse cx="88" cy="220" rx="17" ry="10" fill="#ffe7cc"/><ellipse cx="132" cy="220" rx="17" ry="10" fill="#ffe7cc"/>
+        <path d="M64 70 L36 30 L98 48 Z" fill="#ffc089"/><path d="M156 70 L184 30 L122 48 Z" fill="#ffc089"/>
+        <path d="M68 62 L47 42 L86 52 Z" fill="#ff9fb0"/><path d="M152 62 L173 42 L134 52 Z" fill="#ff9fb0"/>
+        <circle cx="110" cy="106" r="62" fill="#ffd9b0"/>
+        <ellipse cx="88" cy="104" rx="9" ry="11.5" fill="#3b2b2b"/><ellipse cx="132" cy="104" rx="9" ry="11.5" fill="#3b2b2b"/>
+        <circle cx="85" cy="99" r="3.4" fill="#fff"/><circle cx="129" cy="99" r="3.4" fill="#fff"/>
+        <path d="M80 118 q-8 14 0 20 q8 -6 0 -20 z" fill="#8fd3f4"/><path d="M140 120 q-7 12 0 17 q7 -5 0 -17 z" fill="#8fd3f4"/>
+        <ellipse cx="64" cy="128" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/><ellipse cx="156" cy="128" rx="11" ry="7" fill="#ffb3c1" opacity=".8"/>
+        <path d="M110 118 l-6 6 h12 z" fill="#ff8fa3"/><path d="M96 136 Q110 124 124 136" stroke="#e0738a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <g stroke="#e8b48c" stroke-width="2.4" stroke-linecap="round"><path d="M50 114 l-26 -4"/><path d="M50 124 l-26 7"/><path d="M170 114 l26 -4"/><path d="M170 124 l26 7"/></g>
+      </svg>
+      <h2 class="title title--shout">¡COMO TE ATREVES!</h2>
+      <p class="subtitle">Ese botón no era para tocarlo… vuelve a intentarlo, anda 🥺</p>
+      <div class="actions"><button class="btn" id="btnVolver" type="button">Volver</button></div>
+    </section>
+
+    <!-- PANTALLA 4 -->
+    <section class="screen" id="screen4">
+      <div class="hearts" aria-hidden="true"><span>♥</span><span>♥</span><span>♥</span><span>♥</span><span>♥</span><span>♥</span><span>♥</span></div>
+      <svg class="cat" viewBox="0 0 280 250" role="img" aria-label="Dos gatitos abrazados">
+        <ellipse cx="140" cy="236" rx="92" ry="10" fill="#000" opacity=".06"/>
+        <g>
+          <path d="M34 196 C8 190 6 158 22 142" stroke="#f7b26b" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <ellipse cx="78" cy="190" rx="52" ry="44" fill="#ffc089"/>
+          <path d="M32 92 L20 46 L66 66 Z" fill="#ffc089"/><path d="M36 84 L29 60 L54 72 Z" fill="#ff9fb0"/>
+          <path d="M124 92 L136 46 L90 66 Z" fill="#ffc089"/><path d="M120 84 L127 60 L102 72 Z" fill="#ff9fb0"/>
+          <circle cx="78" cy="120" r="52" fill="#ffd9b0"/>
+          <ellipse cx="60" cy="116" rx="8" ry="10.5" fill="#3b2b2b"/><ellipse cx="96" cy="116" rx="8" ry="10.5" fill="#3b2b2b"/>
+          <circle cx="57" cy="111" r="2.8" fill="#fff"/><circle cx="93" cy="111" r="2.8" fill="#fff"/>
+          <ellipse cx="42" cy="136" rx="9" ry="6" fill="#ffb3c1" opacity=".7"/><ellipse cx="114" cy="136" rx="9" ry="6" fill="#ffb3c1" opacity=".7"/>
+          <path d="M78 130 l-5 5 h10 z" fill="#ff8fa3"/><path d="M78 135 v4" stroke="#e0738a" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M78 139 q-7 7 -12 1" stroke="#e0738a" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M78 139 q7 7 12 1" stroke="#e0738a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        </g>
+        <g>
+          <path d="M246 196 C272 190 274 158 258 142" stroke="#f0a35f" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <ellipse cx="202" cy="190" rx="52" ry="44" fill="#ffb877"/>
+          <path d="M248 92 L260 46 L214 66 Z" fill="#ffb877"/><path d="M244 84 L251 60 L226 72 Z" fill="#ff9fb0"/>
+          <path d="M156 92 L144 46 L190 66 Z" fill="#ffb877"/><path d="M160 84 L153 60 L178 72 Z" fill="#ff9fb0"/>
+          <circle cx="202" cy="120" r="52" fill="#ffd0a3"/>
+          <ellipse cx="184" cy="116" rx="8" ry="10.5" fill="#3b2b2b"/><ellipse cx="220" cy="116" rx="8" ry="10.5" fill="#3b2b2b"/>
+          <circle cx="181" cy="111" r="2.8" fill="#fff"/><circle cx="217" cy="111" r="2.8" fill="#fff"/>
+          <ellipse cx="166" cy="136" rx="9" ry="6" fill="#ffb3c1" opacity=".7"/><ellipse cx="238" cy="136" rx="9" ry="6" fill="#ffb3c1" opacity=".7"/>
+          <path d="M202 130 l-5 5 h10 z" fill="#ff8fa3"/><path d="M202 135 v4" stroke="#e0738a" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M202 139 q-7 7 -12 1" stroke="#e0738a" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M202 139 q7 7 12 1" stroke="#e0738a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        </g>
+        <ellipse cx="132" cy="184" rx="17" ry="12" fill="#ffe7cc"/><ellipse cx="148" cy="184" rx="17" ry="12" fill="#ffe7cc"/>
+        <path d="M140 14 C133 2 116 6 116 20 C116 32 130 41 140 50 C150 41 164 32 164 20 C164 6 147 2 140 14 Z" fill="#e01133"/>
+      </svg>
+      <h2 class="title title--shout">¡Un nuevo comienzo juntos!</h2>
+      <p class="subtitle">Espera, tengo 3 regalos para ti &lt;3</p>
+      <div class="actions"><button class="btn" id="btnRegalos" type="button">Ver regalos</button></div>
+    </section>
+
+    <!-- PANTALLA 5: MENÚ DE REGALOS -->
+    <section class="screen" id="screen5">
+      <h2 class="title">Mis 3 regalos</h2>
+      <p class="subtitle">Ábrelos en orden, por favor 🎁</p>
+
+      <div class="gift-grid">
+        <div class="gift-btn" id="goGift1">
+          <span class="gift-icon">🎁</span>
+          <span class="gift-text">Regalo 1</span>
+        </div>
+        <div class="gift-btn" id="goGift2">
+          <span class="gift-icon">📜</span>
+          <span class="gift-text">Regalo 2</span>
+        </div>
+        <div class="gift-btn" id="goGift3">
+          <span class="gift-icon">🖼️</span>
+          <span class="gift-text">Regalo 3</span>
+        </div>
+      </div>
+
+      <div class="actions" style="margin-top: 25px;">
+        <button class="btn btn--ghost btn-back" type="button">Volver al inicio</button>
+      </div>
+    </section>
+
+    <!-- REGALO 1: LA CARTA -->
+    <section class="screen" id="gift1">
+      <h2 class="title">Regalo 1</h2>
+      <div class="letter-wrap">
+        <div class="letter">
+          <p>Si te extraño, ¿y qué? ¿Cuál es el problema?</p>
+          <p>Te extraño por las mañanas y por las noches, cuando estoy solo y cuando estoy rodeado de personas. Te extraño en mis días felices porque quisiera compartirlos contigo, y en los días difíciles porque quisiera refugiarme en ti.</p>
+          <p>Te extraño en las pequeñas cosas: en nuestras conversaciones, en nuestras bromas, en molestarte, en decirte “amor”, en decirte “te amo”. Extraño tu voz, tu presencia y hasta esos momentos en los que no hacíamos nada, pero estar contigo hacía que todo se sintiera bien.</p>
+          <p>Y sí, te extraño todos los días. A veces poquito, a veces demasiado, pero siempre. Porque cuando alguien se vuelve parte de tu vida, su ausencia también se siente.</p>
+          <p>Así que no, no voy a fingir que no me haces falta. Te amo, y por eso te extraño. Y si extrañarte es el precio de quererte tanto, entonces lo pago con gusto.</p>
+          <p class="firma">Orlando ♡</p>
+        </div>
+      </div>
+      <div class="actions"><button class="btn btn--ghost btn-back" type="button">Volver a los regalos</button></div>
+    </section>
+
+    <!-- REGALO 2: RAZONES -->
+    <section class="screen" id="gift2">
+      <h2 class="title title--mid" style="font-size: 1.6rem; margin-bottom: 5px;">100 razones para volverlo a intentar</h2>
+      <p class="hint" style="margin-bottom: 10px;">(Sin culpas)</p>
+      
+      <div class="letter-wrap" style="padding: 10px;">
+        <div class="letter" style="font-size: 1.05rem;">
+          <p>
+          1. Porque aún te amo<br>
+          2. Porque no dejo de pensar en ti<br>
+          3. Porque creo en nosotros<br>
+          4. Porque merecemos otra oportunidad<br>
+          5. Porque lo bueno no se olvida<br>
+          6. Los errores también enseñan<br>
+          7. Porque cambiaré por ti<br>
+          8. Aprendí de lo que fallé<br>
+          9. Porque sin ti nada es igual<br>
+          10. <strong>TU AUSENCIA pesa</strong><br>
+          11. Porque quiero enmendar lo que rompí<br>
+          12. Porque cada momento contigo fue real<br>
+          13. Porque te extraño<br>
+          14. El amor que sentí y siento nunca fue mentira<br>
+          15. Me importas más de lo que imaginas<br>
+          16. No quiero que lo nuestro termine así<br>
+          17. Porque nos debemos un nuevo comienzo<br>
+          18. Tus ojos aún viven en los míos<br>
+          19. Porque sin buscarla, sigues estando en todo<br>
+          20. Porque hay cosas que solo tú sabes de mí<br>
+          21. Porque nadie me ha mirado como tú<br>
+          22. Porque aún te encuentro en cada canción<br>
+          23. Porque haces falta, aunque me quiera hacer el fuerte<br>
+          24. Porque lo nuestro es único<br>
+          25. Porque sé cuidar lo que amo<br>
+          26. Porque aún hay historia que escribir contigo<br>
+          27. Porque mereces una mejor versión de mí<br>
+          28. Porque no quiero estar sin ti<br>
+          29. Porque los recuerdos son más fuertes que las heridas<br>
+          30. Porque nadie ocupará tu lugar<br>
+          31. Porque fuiste hogar, no solo una persona<br>
+          32. Porque sigo creyendo en lo que fuimos<br>
+          33. Porque contigo sentí paz<br>
+          34. Porque tu voz me calma<br>
+          35. Porque no puedo rendirme<br>
+          36. Porque amar es luchar<br>
+          37. Porque todo de ti, aún vive en mí<br>
+          38. Porque no hay momento del día que no te piense<br>
+          39. Porque quiero demostrártelo, no decirlo<br>
+          40. Cumplir los hechos y palabras<br>
+          41. Porque no todo está perdido<br>
+          42. Porque si hay amor, hay esperanza<br>
+          43. Porque sé que el amor vale más que el orgullo<br>
+          44. Porque fui feliz, de verdad<br>
+          45. Porque mereces escribir una mejor historia<br>
+          46. Porque quiero ver cómo hubiera sido, si nos hubiéramos elegido otra vez<br>
+          47. Porque me ilusiona pensar en ti<br>
+          48. Porque el tiempo hizo entender muchas cosas<br>
+          49. Porque esta vez no quiero soltarte<br>
+          50. <strong>PORQUE TÚ ME INSPIRAS A SER MEJOR</strong><br>
+          51. Porque contigo aprendí el valor de lo profundo<br>
+          52. Porque no quiero buscar en otras <strong>LO QUE YA ENCONTRÉ EN TI</strong><br>
+          53. Porque me arrepiento de no haber cuidado mis errores o haberlos cambiado para que te sintieras mejor<br>
+          54. Porque nunca quise hacerte daño<br>
+          55. Porque me estás doliendo<br>
+          56. Porque mereces escuchar todo lo que no te dije<br>
+          57. Porque tu risa vive en mi memoria<br>
+          58. Porque tú fuiste mi paz<br>
+          59. Porque no encontraré un "nosotros" igual<br>
+          60. Porque sigo creyendo en que podemos sanar<br>
+          61. Porque te pienso incluso cuando no quiero<br>
+          62. Porque siento que no todo ha terminado<br>
+          63. Porque mereces saber cuánto te valoro<br>
+          64. Porque haces falta, en todos los sentidos<br>
+          65. Porque quiero abrazarte sin culpas<br>
+          66. Porque los buenos amores no se olvidan<br>
+          67. Porque tú estás en mi futuro<br>
+          68. Porque a pesar de todo, estás siempre presente en mí<br>
+          69. Porque contigo aprendí lo que es amar de verdad<br>
+          70. Porque sin ti, mis días son grises<br>
+          71. Porque aún tengo cosas que decirte<br>
+          72. Porque te sigo eligiendo, a pesar de todo<br>
+          73. Porque mereces una mejor historia<br>
+          74. Porque me haces temblar el alma<br>
+          75. Porque sueño contigo<br>
+          76. Porque no todo fueron "problemas"<br>
+          77. Porque mi vida se siente incompleta sin ti<br>
+          78. Porque lo bonito también cuenta<br>
+          79. <strong>PORQUE LOS ERRORES NO DEFINEN TODO</strong><br>
+          80. Porque lo nuestro merece lucha, no resignación<br>
+          81. Porque quiero recuperar lo que se perdió<br>
+          82. Porque me duele el ADIÓS<br>
+          83. Porque prefiero intentar y fallar que nunca intentarlo por una última vez<br>
+          84. Porque la esperanza aún vive<br>
+          85. Porque fuiste hogar, luz y amor<br>
+          86. Porque sigo queriendo saber de ti<br>
+          87. Por tu forma de ser
+          </p>
+          
+          <p style="text-align:center; font-weight:bold; color:var(--red); margin: 10px 0;">Seguir</p>
+
+          <p>
+          88. Porque aún hay amor<br>
+          89. Porque quiero pedirte perdón<br>
+          90. <strong>TE EXTRAÑO CON EL ALMA</strong><br>
+          91. Porque cada día sin ti, es un recordatorio de todo lo que vivimos juntos<br>
+          92. <strong>PORQUE QUIERO SANAR CONTIGO</strong><br>
+          93. Porque vales cada intento<br>
+          94. Porque no quiero más finales<br>
+          95. Porque todo tenía sentido<br>
+          96. Porque el corazón no olvida lo que fue verdadero<br>
+          97. Porque el amor sigue aquí<br>
+          98. Porque creo en ti<br>
+          99. Porque creo en mí<br>
+          100. Y en lo que podríamos volver a ser
+          </p>
+
+          <hr style="border:0; border-top:1px dashed var(--red); margin: 20px 0; opacity:0.5;">
+
+          <p style="text-align:center; color:var(--red); font-weight:bold; font-size:1.2em; font-family:'Dancing Script', cursive;">
+            Una sola razón para ya no intentarlo
+          </p>
+          
+          <p>Si mi intento por amarte te lastimé, si te fallé cuando más me necesitabas, creo que lo más sincero que puedo hacer por amor es jamás soltarte, perdón por todo.</p>
+          
+          <p>Dame una última oportunidad para demostrarte que aprendí de mis errores y que sí puedo ser la persona que te mereces. Déjame luchar por ti una última vez, prometo hacerlo bien.</p>
+          
+          <p class="firma">Orlando ♡</p>
+        </div>
+      </div>
+      
+      <div class="actions"><button class="btn btn--ghost btn-back" type="button">Volver a los regalos</button></div>
+    </section>
+
+    <!-- REGALO 3: LA FOTO -->
+    <section class="screen" id="gift3">
+      <h2 class="title">Regalo 3</h2>
+      
+      <div class="photo-frame">
+        <img src="https://i.postimg.cc/h4scW1nC/photo-2026-10-18-10-48-47.jpg" alt="Orlando y Verito" class="photo-img">
+        
+        <div class="photo-caption">
+          Tú y yo.<br>
+          <span style="font-size: 1rem; color: var(--ink-soft);">Porque los mejores recuerdos aún están por venir.</span>
+        </div>
+      </div>
+
+      <div class="actions" style="margin-top: 15px;">
+        <button class="btn btn--ghost btn-back" type="button">Volver a los regalos</button>
+      </div>
+    </section>
+
+  </div><!-- /card -->
+</div><!-- /frame -->
+
+<!-- Script de la API de YouTube -->
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  // --- Lógica de la Música de YouTube ---
+  let player;
+  let isPlaying = false;
+  const musicBtn = document.getElementById('music-btn');
+
+  window.onYouTubeIframeAPIReady = function() {
+    player = new YT.Player('yt-player', {
+      height: '1',
+      width: '1',
+      videoId: 'nvd16igFRnk', // ID de la canción de The Marías
+      playerVars: {
+        'autoplay': 0,
+        'loop': 1,
+        'playlist': 'nvd16igFRnk',
+        'controls': 0,
+        'showinfo': 0,
+        'rel': 0
+      },
+      events: {
+        'onReady': (event) => {
+          // Silenciamos el video por defecto para no asustar
+          event.target.mute(); 
+        },
+        'onStateChange': (event) => {
+          if (event.data === YT.PlayerState.PLAYING) {
+            isPlaying = true;
+            musicBtn.classList.add('playing');
+            musicBtn.textContent = '🎵';
+          } else {
+            isPlaying = false;
+            musicBtn.classList.remove('playing');
+            musicBtn.textContent = '🔇';
+          }
+        }
+      }
+    });
+  };
+
+  // Función maestra para arrancar la música
+  function startMusic() {
+    if (player && player.playVideo) {
+      player.unMute(); // Quitamos el silencio
+      player.setVolume(60); // Volumen al 60%
+      player.playVideo();
+    }
+  }
+
+  // TRUCO MAESTRO: El primer toque o clic en CUALQUIER parte de la pantalla enciende la música
+  const activarMusica = () => {
+    startMusic();
+    // Una vez que suena, quitamos estos escuchadores para que no interfieran
+    document.removeEventListener('click', activarMusica);
+    document.removeEventListener('touchstart', activarMusica);
+  };
+  
+  document.addEventListener('click', activarMusica);
+  document.addEventListener('touchstart', activarMusica);
+
+  // Botón flotante para pausar/reanudar manualmente
+  musicBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // Evita que el clic se propague al body
+    if (!player) return;
+    if (isPlaying) {
+      player.pauseVideo();
+    } else {
+      player.playVideo();
+    }
+  });
+
+  // --- Lógica del resto de la página ---
+  const screens     = Array.from(document.querySelectorAll('.screen'));
+  const card        = document.getElementById('card');
+
+  const btnYes1     = document.getElementById('yes1');
+  const btnNo1      = document.getElementById('no1');
+  const btnYes2     = document.getElementById('yes2');
+  const btnNo2      = document.getElementById('no2');
+  const btnVolver   = document.getElementById('btnVolver');
+  const btnRegalos  = document.getElementById('btnRegalos');
+
+  const goGift1     = document.getElementById('goGift1');
+  const goGift2     = document.getElementById('goGift2');
+  const goGift3     = document.getElementById('goGift3');
+  
+  const btnBacks    = document.querySelectorAll('.btn-back');
+
+  let pantallaRetorno = 'screen1';
+
+  function show(id) {
+    screens.forEach(s => s.classList.remove('active'));
+    const target = document.getElementById(id);
+    if (!target) return;
+    target.style.animation = 'none';
+    void target.offsetWidth;
+    target.style.animation = '';
+    target.classList.add('active');
+    
+    if (id.startsWith('gift')) {
+      const letter = target.querySelector('.letter');
+      if (letter) letter.scrollTop = 0;
+    }
+  }
+
+  const punteroFino = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  function initEscape(btn) {
+    if (!btn) return;
+    let tx = 0, ty = 0;
+    btn._reset = function () { tx = 0; ty = 0; btn.style.transform = ''; };
+    if (!punteroFino) return;
+
+    btn.addEventListener('mouseenter', function (e) {
+      const cardRect = card.getBoundingClientRect();
+      const btnRect  = btn.getBoundingClientRect();
+      const baseLeft = btnRect.left - tx;
+      const baseTop  = btnRect.top  - ty;
+      const pad  = 12;
+      const minX = cardRect.left + pad - baseLeft;
+      const maxX = cardRect.right - pad - btnRect.width - baseLeft;
+      const minY = cardRect.top + pad - baseTop;
+      const maxY = cardRect.bottom - pad - btnRect.height - baseTop;
+      if (maxX <= minX || maxY <= minY) return;
+
+      let nx = tx, ny = ty, intentos = 0;
+      do {
+        nx = minX + Math.random() * (maxX - minX);
+        ny = minY + Math.random() * (maxY - minY);
+        intentos++;
+      } while (intentos < 25 && Math.hypot(baseLeft + nx + btnRect.width / 2 - e.clientX, baseTop + ny + btnRect.height / 2 - e.clientY) < 130);
+      tx = nx; ty = ny;
+      btn.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
+    });
+  }
+
+  initEscape(btnNo1);
+  initEscape(btnNo2);
+
+  // Al dar clic en los botones, avanzar de pantalla
+  btnYes1.addEventListener('click', () => show('screen2'));
+  btnNo1.addEventListener('click', () => { pantallaRetorno = 'screen1'; show('screen3'); });
+
+  btnYes2.addEventListener('click', () => show('screen4'));
+  btnNo2.addEventListener('click', () => { pantallaRetorno = 'screen2'; show('screen3'); });
+
+  btnVolver.addEventListener('click', () => {
+    if (btnNo2._reset) btnNo2._reset();
+    show(pantallaRetorno);
+  });
+
+  btnRegalos.addEventListener('click', () => show('screen5'));
+
+  goGift1.addEventListener('click', () => show('gift1'));
+  goGift2.addEventListener('click', () => show('gift2'));
+  goGift3.addEventListener('click', () => show('gift3'));
+
+  btnBacks.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.closest('#screen5')) {
+        if (btnNo1._reset) btnNo1._reset();
+        if (btnNo2._reset) btnNo2._reset();
+        show('screen1');
+      } else {
+        show('screen5');
+      }
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
